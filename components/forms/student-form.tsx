@@ -68,7 +68,10 @@ export function StudentForm({ classes }: { classes: { id: string; name: string }
       </div>
       <div>
         <Label htmlFor="guardianPhone">Guardian phone</Label>
-        <Input id="guardianPhone" name="guardianPhone" />
+        <Input id="guardianPhone" name="guardianPhone" type="tel" placeholder="e.g. +254712345678" required />
+        <p className="mt-1 text-xs text-slate-400">
+          Used for emergency SMS alerts, so this must be a real, reachable number.
+        </p>
       </div>
       <div>
         <Label htmlFor="guardianRelationship">Relationship</Label>
