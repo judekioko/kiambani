@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
+import { generateReceiptNo } from "@/lib/receipt";
 import {
   feeStructureSchema,
   generateInvoicesSchema,
@@ -116,7 +117,7 @@ export async function recordPayment(
   if (!invoice) return { error: "Invoice not found" };
 
   await prisma.$transaction(async (tx) => {
-    await tx.payment.create({
+    const payment = await tx.payment.create({
       data: {
         invoiceId: invoice.id,
         amount: parsed.data.amount,
@@ -125,6 +126,17 @@ export async function recordPayment(
         recordedById: session.userId,
       },
     });
+
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        await tx.receipt.create({
+          data: { paymentId: payment.id, receiptNo: generateReceiptNo() },
+        });
+        break;
+      } catch {
+        if (attempt === 2) throw new Error("Could not generate a unique receipt number");
+      }
+    }
 
     const totalPaid =
       invoice.payments.reduce((sum, p) => sum + p.amount, 0) + parsed.data.amount;

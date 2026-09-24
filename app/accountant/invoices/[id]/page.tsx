@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/page-header";
@@ -24,7 +25,7 @@ export default async function InvoiceDetailPage({
       student: { include: { class: true } },
       term: true,
       items: true,
-      payments: { orderBy: { paidAt: "desc" }, include: { recordedBy: true } },
+      payments: { orderBy: { paidAt: "desc" }, include: { recordedBy: true, receipt: true } },
     },
   });
   if (!invoice) notFound();
@@ -92,6 +93,7 @@ export default async function InvoiceDetailPage({
                     <Th>Method</Th>
                     <Th>Reference</Th>
                     <Th>Recorded by</Th>
+                    <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -102,11 +104,21 @@ export default async function InvoiceDetailPage({
                       <Td>{p.method}</Td>
                       <Td>{p.reference}</Td>
                       <Td>{p.recordedBy.name}</Td>
+                      <Td>
+                        {p.receipt ? (
+                          <Link
+                            href={`/accountant/receipts/${p.receipt.id}`}
+                            className="text-emerald-700 hover:underline"
+                          >
+                            Receipt
+                          </Link>
+                        ) : null}
+                      </Td>
                     </Tr>
                   ))}
                   {invoice.payments.length === 0 ? (
                     <Tr>
-                      <Td colSpan={5} className="text-center text-slate-400">
+                      <Td colSpan={6} className="text-center text-slate-400">
                         No payments yet
                       </Td>
                     </Tr>

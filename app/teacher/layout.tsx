@@ -6,6 +6,7 @@ const navItems: NavItem[] = [
   { href: "/teacher/attendance", label: "Attendance" },
   { href: "/teacher/grades", label: "Grades" },
   { href: "/teacher/announcements", label: "Announcements" },
+  { href: "/teacher/events", label: "Events" },
 ];
 
 export default async function TeacherLayout({ children }: { children: React.ReactNode }) {

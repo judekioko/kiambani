@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
 import { getGuardianStudents } from "@/lib/guardian";
@@ -20,7 +21,7 @@ export default async function ParentFeesPage() {
     students.map((student) =>
       prisma.invoice.findMany({
         where: { studentId: student.id },
-        include: { term: true, payments: true },
+        include: { term: true, payments: { include: { receipt: true } } },
         orderBy: { createdAt: "desc" },
       })
     )
@@ -46,6 +47,7 @@ export default async function ParentFeesPage() {
                     <Th>Paid</Th>
                     <Th>Balance</Th>
                     <Th>Status</Th>
+                    <Th>Receipts</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -60,12 +62,27 @@ export default async function ParentFeesPage() {
                         <Td>
                           <Badge tone={statusTone[inv.status]}>{inv.status}</Badge>
                         </Td>
+                        <Td>
+                          <div className="flex gap-2">
+                            {inv.payments
+                              .filter((p) => p.receipt)
+                              .map((p) => (
+                                <Link
+                                  key={p.id}
+                                  href={`/parent/receipts/${p.receipt!.id}`}
+                                  className="text-emerald-700 hover:underline"
+                                >
+                                  {p.paidAt.toLocaleDateString()}
+                                </Link>
+                              ))}
+                          </div>
+                        </Td>
                       </Tr>
                     );
                   })}
                   {invoicesByStudent[i].length === 0 ? (
                     <Tr>
-                      <Td colSpan={5} className="text-center text-slate-400">
+                      <Td colSpan={6} className="text-center text-slate-400">
                         No invoices yet
                       </Td>
                     </Tr>
