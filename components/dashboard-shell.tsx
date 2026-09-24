@@ -19,7 +19,7 @@ export function DashboardShell({
 }) {
   return (
     <div className="flex min-h-screen">
-      <aside className="hidden w-60 flex-col border-r border-slate-200 bg-white sm:flex">
+      <aside className="hidden w-60 flex-col border-r border-slate-200 bg-white sm:flex print:hidden">
         <div className="border-b border-slate-200 px-5 py-4">
           <p className="text-base font-semibold text-slate-900">Kiambani School</p>
           <p className="text-xs text-slate-500">{title}</p>
@@ -37,7 +37,7 @@ export function DashboardShell({
         </nav>
       </aside>
       <div className="flex flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-3">
+        <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-3 print:hidden">
           <p className="text-sm font-medium text-slate-500 sm:hidden">Kiambani School</p>
           <div className="ml-auto flex items-center gap-3">
             <div className="text-right">

@@ -69,6 +69,13 @@ enum AnnouncementAudience {
   CLASS
 }
 
+enum EventAudience {
+  ALL
+  TEACHERS
+  PARENTS
+  CLASS
+}
+
 model School {
   id      String @id @default(cuid())
   name    String
@@ -121,6 +128,7 @@ model SchoolClass {
   assessments          Assessment[]
   feeStructures        FeeStructure[]
   announcements        Announcement[]
+  events               SchoolEvent[]
 
   @@unique([academicYearId, name])
 }
@@ -165,6 +173,8 @@ model User {
   markedAttendance  AttendanceRecord[]     @relation("AttendanceMarkedBy")
   recordedPayments  Payment[]              @relation("PaymentRecordedBy")
   announcements     Announcement[]         @relation("AnnouncementAuthor")
+  eventsAuthored    SchoolEvent[]          @relation("EventAuthor")
+  emergencyBroadcastsSent EmergencyBroadcast[] @relation("EmergencyBroadcastSender")
 }
 
 model StaffProfile {
@@ -323,6 +333,16 @@ model Payment {
   paidAt        DateTime      @default(now())
   recordedById  String
   recordedBy    User          @relation("PaymentRecordedBy", fields: [recordedById], references: [id])
+
+  receipt Receipt?
+}
+
+model Receipt {
+  id        String   @id @default(cuid())
+  receiptNo String   @unique
+  paymentId String   @unique
+  payment   Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  issuedAt  DateTime @default(now())
 }
 
 model Announcement {
@@ -335,4 +355,29 @@ model Announcement {
   authorId    String
   author      User                 @relation("AnnouncementAuthor", fields: [authorId], references: [id])
   publishedAt DateTime             @default(now())
+}
+
+model SchoolEvent {
+  id          String        @id @default(cuid())
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  audience    EventAudience
+  classId     String?
+  class       SchoolClass?  @relation(fields: [classId], references: [id])
+  authorId    String
+  author      User          @relation("EventAuthor", fields: [authorId], references: [id])
+  createdAt   DateTime      @default(now())
+}
+
+model EmergencyBroadcast {
+  id            String   @id @default(cuid())
+  message       String
+  sentCount     Int
+  failedCount   Int
+  smsConfigured Boolean
+  sentById      String
+  sentBy        User     @relation("EmergencyBroadcastSender", fields: [sentById], references: [id])
+  createdAt     DateTime @default(now())
 }

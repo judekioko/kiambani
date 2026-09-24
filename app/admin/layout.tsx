@@ -12,6 +12,8 @@ const navItems: NavItem[] = [
   { href: "/admin/grading-scales", label: "Grading Scales" },
   { href: "/admin/fees", label: "Fees" },
   { href: "/admin/announcements", label: "Announcements" },
+  { href: "/admin/events", label: "Events" },
+  { href: "/admin/emergency", label: "Emergency" },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
