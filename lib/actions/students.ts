@@ -23,7 +23,7 @@ export async function createStudent(
     classId: formData.get("classId") || undefined,
     guardianName: formData.get("guardianName"),
     guardianEmail: formData.get("guardianEmail"),
-    guardianPhone: formData.get("guardianPhone") || undefined,
+    guardianPhone: formData.get("guardianPhone"),
     guardianRelationship: formData.get("guardianRelationship"),
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
@@ -50,6 +50,11 @@ export async function createStudent(
     });
   } else if (guardian.role !== "PARENT") {
     return { error: "This email belongs to a non-parent account already" };
+  } else if (!guardian.phone) {
+    guardian = await prisma.user.update({
+      where: { id: guardian.id },
+      data: { phone: data.guardianPhone },
+    });
   }
 
   await prisma.student.create({

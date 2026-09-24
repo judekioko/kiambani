@@ -9,6 +9,6 @@ export const createStudentSchema = z.object({
   classId: z.string().optional(),
   guardianName: z.string().trim().min(1, "Guardian name is required"),
   guardianEmail: z.string().trim().toLowerCase().email("Enter a valid guardian email"),
-  guardianPhone: z.string().trim().optional(),
+  guardianPhone: z.string().trim().min(1, "Guardian phone is required"),
   guardianRelationship: z.string().trim().min(1, "Relationship is required"),
 });
