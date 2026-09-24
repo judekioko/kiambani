@@ -1,0 +1,338 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  ACCOUNTANT
+  PARENT
+}
+
+enum StudentStatus {
+  ACTIVE
+  TRANSFERRED
+  GRADUATED
+  INACTIVE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+enum AssessmentType {
+  EXAM
+  CAT
+  ASSIGNMENT
+}
+
+enum FeeItemName {
+  TUITION
+  TRANSPORT
+  BOARDING
+  LUNCH
+  ACTIVITY
+  UNIFORM
+  OTHER
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PARTIAL
+  PAID
+}
+
+enum PaymentMethod {
+  CASH
+  MPESA
+  BANK
+  CHEQUE
+}
+
+enum AnnouncementAudience {
+  ALL
+  TEACHERS
+  PARENTS
+  CLASS
+}
+
+model School {
+  id      String @id @default(cuid())
+  name    String
+  address String?
+  phone   String?
+  email   String?
+  logoUrl String?
+}
+
+model AcademicYear {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  startDate DateTime
+  endDate   DateTime
+  isCurrent Boolean  @default(false)
+
+  terms   Term[]
+  classes SchoolClass[]
+}
+
+model Term {
+  id             String   @id @default(cuid())
+  name           String
+  startDate      DateTime
+  endDate        DateTime
+  isCurrent      Boolean  @default(false)
+  academicYearId String
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+
+  classSubjectTeachers ClassSubjectTeacher[]
+  attendanceRecords    AttendanceRecord[]
+  assessments          Assessment[]
+  feeStructures        FeeStructure[]
+  invoices             Invoice[]
+
+  @@unique([academicYearId, name])
+}
+
+model SchoolClass {
+  id             String @id @default(cuid())
+  name           String
+  academicYearId String
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+  classTeacherId String?
+  classTeacher   User?  @relation("ClassTeacher", fields: [classTeacherId], references: [id])
+
+  students             Student[]
+  classSubjectTeachers ClassSubjectTeacher[]
+  attendanceRecords    AttendanceRecord[]
+  assessments          Assessment[]
+  feeStructures        FeeStructure[]
+  announcements        Announcement[]
+
+  @@unique([academicYearId, name])
+}
+
+model Subject {
+  id   String @id @default(cuid())
+  name String
+  code String @unique
+
+  classSubjectTeachers ClassSubjectTeacher[]
+  assessments          Assessment[]
+}
+
+model ClassSubjectTeacher {
+  id        String @id @default(cuid())
+  classId   String
+  class     SchoolClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  teacherId String
+  teacher   User @relation("SubjectTeacher", fields: [teacherId], references: [id])
+  termId    String
+  term      Term @relation(fields: [termId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, subjectId, termId])
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         Role
+  name         String
+  phone        String?
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  staffProfile      StaffProfile?
+  classesAsTeacher  SchoolClass[]          @relation("ClassTeacher")
+  subjectsTaught    ClassSubjectTeacher[]  @relation("SubjectTeacher")
+  studentsAsGuardian StudentGuardian[]
+  markedAttendance  AttendanceRecord[]     @relation("AttendanceMarkedBy")
+  recordedPayments  Payment[]              @relation("PaymentRecordedBy")
+  announcements     Announcement[]         @relation("AnnouncementAuthor")
+}
+
+model StaffProfile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  staffNo   String   @unique
+  position  String
+  department String?
+  hireDate  DateTime
+}
+
+model Student {
+  id             String        @id @default(cuid())
+  admissionNo    String        @unique
+  firstName      String
+  lastName       String
+  dob            DateTime
+  gender         Gender
+  classId        String?
+  class          SchoolClass?  @relation(fields: [classId], references: [id])
+  status         StudentStatus @default(ACTIVE)
+  enrollmentDate DateTime      @default(now())
+  photoUrl       String?
+
+  guardians         StudentGuardian[]
+  attendanceRecords AttendanceRecord[]
+  marks             Mark[]
+  invoices          Invoice[]
+}
+
+model StudentGuardian {
+  id          String  @id @default(cuid())
+  studentId   String
+  student     Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  guardianId  String
+  guardian    User    @relation(fields: [guardianId], references: [id], onDelete: Cascade)
+  relationship String
+  isPrimary   Boolean @default(false)
+
+  @@unique([studentId, guardianId])
+}
+
+model AttendanceRecord {
+  id         String           @id @default(cuid())
+  studentId  String
+  student    Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  classId    String
+  class      SchoolClass      @relation(fields: [classId], references: [id], onDelete: Cascade)
+  termId     String
+  term       Term             @relation(fields: [termId], references: [id], onDelete: Cascade)
+  date       DateTime
+  status     AttendanceStatus
+  markedById String
+  markedBy   User             @relation("AttendanceMarkedBy", fields: [markedById], references: [id])
+
+  @@unique([studentId, date])
+}
+
+model Assessment {
+  id        String         @id @default(cuid())
+  name      String
+  type      AssessmentType
+  maxScore  Float
+  termId    String
+  term      Term           @relation(fields: [termId], references: [id], onDelete: Cascade)
+  classId   String
+  class     SchoolClass    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  date      DateTime       @default(now())
+
+  marks Mark[]
+}
+
+model Mark {
+  id           String     @id @default(cuid())
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  score        Float
+  remarks      String?
+
+  @@unique([assessmentId, studentId])
+}
+
+model GradingScale {
+  id     String      @id @default(cuid())
+  name   String      @unique
+  bands  GradeBand[]
+}
+
+model GradeBand {
+  id             String       @id @default(cuid())
+  gradingScaleId String
+  gradingScale   GradingScale @relation(fields: [gradingScaleId], references: [id], onDelete: Cascade)
+  minPercent     Float
+  maxPercent     Float
+  letter         String
+  comment        String?
+}
+
+model FeeStructure {
+  id      String   @id @default(cuid())
+  classId String
+  class   SchoolClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  termId  String
+  term    Term     @relation(fields: [termId], references: [id], onDelete: Cascade)
+
+  items FeeItem[]
+
+  @@unique([classId, termId])
+}
+
+model FeeItem {
+  id             String       @id @default(cuid())
+  feeStructureId String
+  feeStructure   FeeStructure @relation(fields: [feeStructureId], references: [id], onDelete: Cascade)
+  name           FeeItemName
+  amount         Float
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  studentId   String
+  student     Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  termId      String
+  term        Term          @relation(fields: [termId], references: [id], onDelete: Cascade)
+  totalAmount Float
+  dueDate     DateTime
+  status      InvoiceStatus @default(UNPAID)
+  createdAt   DateTime      @default(now())
+
+  items    InvoiceItem[]
+  payments Payment[]
+
+  @@unique([studentId, termId])
+}
+
+model InvoiceItem {
+  id          String      @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice     @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  name        FeeItemName
+  amount      Float
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  invoiceId     String
+  invoice       Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amount        Float
+  method        PaymentMethod
+  reference     String?
+  paidAt        DateTime      @default(now())
+  recordedById  String
+  recordedBy    User          @relation("PaymentRecordedBy", fields: [recordedById], references: [id])
+}
+
+model Announcement {
+  id          String               @id @default(cuid())
+  title       String
+  body        String
+  audience    AnnouncementAudience
+  classId     String?
+  class       SchoolClass?         @relation(fields: [classId], references: [id])
+  authorId    String
+  author      User                 @relation("AnnouncementAuthor", fields: [authorId], references: [id])
+  publishedAt DateTime             @default(now())
+}
