@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { StudentStatusForm } from "@/components/forms/student-status-form";
+import { GuardianPhoneForm } from "@/components/forms/guardian-phone-form";
 import { computeReportCard } from "@/lib/report-card";
 import { ReportCardTable } from "@/components/report-card-table";
 
@@ -75,14 +76,21 @@ export default async function StudentDetailPage({
           </CardHeader>
           <CardBody className="space-y-3 text-sm">
             {student.guardians.map((g) => (
-              <div key={g.id} className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-slate-900">{g.guardian.name}</p>
-                  <p className="text-xs text-slate-500">
-                    {g.relationship} · {g.guardian.email}
-                  </p>
+              <div key={g.id} className="space-y-2 border-b border-slate-100 pb-3 last:border-0 last:pb-0">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-slate-900">{g.guardian.name}</p>
+                    <p className="text-xs text-slate-500">
+                      {g.relationship} · {g.guardian.email}
+                    </p>
+                  </div>
+                  {g.isPrimary ? <Badge tone="emerald">Primary</Badge> : null}
                 </div>
-                {g.isPrimary ? <Badge tone="emerald">Primary</Badge> : null}
+                <GuardianPhoneForm
+                  studentId={student.id}
+                  guardianId={g.guardian.id}
+                  initialPhone={g.guardian.phone}
+                />
               </div>
             ))}
             {student.guardians.length === 0 ? (
