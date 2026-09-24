@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { createStudentSchema } from "@/lib/validators/student";
+import { createStudentSchema, updateGuardianContactSchema } from "@/lib/validators/student";
 import { generateTempPassword } from "@/lib/password";
 import type { ActionState } from "./types";
 
@@ -83,21 +83,30 @@ export async function createStudent(
   };
 }
 
-export async function updateGuardianPhone(
+export async function updateGuardianContact(
   _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> {
   await requireRole("ADMIN");
 
-  const guardianId = String(formData.get("guardianId") ?? "");
-  const studentId = String(formData.get("studentId") ?? "");
-  const phone = String(formData.get("phone") ?? "").trim();
-  if (!phone) return { error: "Phone number is required" };
+  const parsed = updateGuardianContactSchema.safeParse({
+    guardianId: formData.get("guardianId"),
+    studentId: formData.get("studentId"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  const { guardianId, studentId, email, phone } = parsed.data;
 
-  await prisma.user.update({ where: { id: guardianId }, data: { phone } });
+  const existingWithEmail = await prisma.user.findUnique({ where: { email } });
+  if (existingWithEmail && existingWithEmail.id !== guardianId) {
+    return { error: "This email is already used by another account" };
+  }
+
+  await prisma.user.update({ where: { id: guardianId }, data: { email, phone } });
 
   revalidatePath(`/admin/students/${studentId}`);
-  return { success: "Phone number updated" };
+  return { success: "Contact details updated" };
 }
 
 export async function updateStudentStatus(

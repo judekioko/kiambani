@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { StudentStatusForm } from "@/components/forms/student-status-form";
-import { GuardianPhoneForm } from "@/components/forms/guardian-phone-form";
+import { GuardianContactForm } from "@/components/forms/guardian-contact-form";
 import { computeReportCard } from "@/lib/report-card";
 import { ReportCardTable } from "@/components/report-card-table";
 
@@ -80,15 +80,14 @@ export default async function StudentDetailPage({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-slate-900">{g.guardian.name}</p>
-                    <p className="text-xs text-slate-500">
-                      {g.relationship} · {g.guardian.email}
-                    </p>
+                    <p className="text-xs text-slate-500">{g.relationship}</p>
                   </div>
                   {g.isPrimary ? <Badge tone="emerald">Primary</Badge> : null}
                 </div>
-                <GuardianPhoneForm
+                <GuardianContactForm
                   studentId={student.id}
                   guardianId={g.guardian.id}
+                  initialEmail={g.guardian.email}
                   initialPhone={g.guardian.phone}
                 />
               </div>
