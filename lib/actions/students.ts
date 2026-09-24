@@ -83,6 +83,23 @@ export async function createStudent(
   };
 }
 
+export async function updateGuardianPhone(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  await requireRole("ADMIN");
+
+  const guardianId = String(formData.get("guardianId") ?? "");
+  const studentId = String(formData.get("studentId") ?? "");
+  const phone = String(formData.get("phone") ?? "").trim();
+  if (!phone) return { error: "Phone number is required" };
+
+  await prisma.user.update({ where: { id: guardianId }, data: { phone } });
+
+  revalidatePath(`/admin/students/${studentId}`);
+  return { success: "Phone number updated" };
+}
+
 export async function updateStudentStatus(
   studentId: string,
   status: "ACTIVE" | "TRANSFERRED" | "GRADUATED" | "INACTIVE"
