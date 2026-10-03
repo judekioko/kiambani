@@ -70,6 +70,17 @@ enum AnnouncementAudience {
   CLASS
 }
 
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+}
+
+enum PaymentClaimStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+}
+
 enum EventAudience {
   ALL
   TEACHERS
@@ -84,6 +95,11 @@ model School {
   phone   String?
   email   String?
   logoUrl String?
+
+  bankName          String?
+  bankAccountName   String?
+  bankAccountNumber String?
+  bankBranch        String?
 }
 
 model AcademicYear {
@@ -111,6 +127,7 @@ model Term {
   assessments          Assessment[]
   feeStructures        FeeStructure[]
   invoices             Invoice[]
+  unitRegistrations    UnitRegistration[]
 
   @@unique([academicYearId, name])
 }
@@ -141,6 +158,7 @@ model Subject {
 
   classSubjectTeachers ClassSubjectTeacher[]
   assessments          Assessment[]
+  unitRegistrations    UnitRegistration[]
 }
 
 model ClassSubjectTeacher {
@@ -177,6 +195,7 @@ model User {
   announcements     Announcement[]         @relation("AnnouncementAuthor")
   eventsAuthored    SchoolEvent[]          @relation("EventAuthor")
   emergencyBroadcastsSent EmergencyBroadcast[] @relation("EmergencyBroadcastSender")
+  reviewedClaims    PaymentClaim[]         @relation("ClaimReviewer")
 }
 
 model StaffProfile {
@@ -203,11 +222,15 @@ model Student {
   photoUrl       String?
   userId         String?       @unique
   user           User?         @relation("StudentUser", fields: [userId], references: [id])
+  hostelName     String?
+  hostelRoom     String?
 
   guardians         StudentGuardian[]
   attendanceRecords AttendanceRecord[]
   marks             Mark[]
   invoices          Invoice[]
+  unitRegistrations UnitRegistration[]
+  paymentClaims     PaymentClaim[]
 }
 
 model StudentGuardian {
@@ -313,8 +336,9 @@ model Invoice {
   status      InvoiceStatus @default(UNPAID)
   createdAt   DateTime      @default(now())
 
-  items    InvoiceItem[]
-  payments Payment[]
+  items         InvoiceItem[]
+  payments      Payment[]
+  paymentClaims PaymentClaim[]
 
   @@unique([studentId, termId])
 }
@@ -339,6 +363,7 @@ model Payment {
   recordedBy    User          @relation("PaymentRecordedBy", fields: [recordedById], references: [id])
 
   receipt Receipt?
+  claim   PaymentClaim?
 }
 
 model Receipt {
@@ -384,4 +409,38 @@ model EmergencyBroadcast {
   sentById      String
   sentBy        User     @relation("EmergencyBroadcastSender", fields: [sentById], references: [id])
   createdAt     DateTime @default(now())
+}
+
+model UnitRegistration {
+  id        String             @id @default(cuid())
+  studentId String
+  student   Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  termId    String
+  term      Term               @relation(fields: [termId], references: [id], onDelete: Cascade)
+  status    RegistrationStatus @default(APPROVED)
+  createdAt DateTime           @default(now())
+
+  @@unique([studentId, subjectId, termId])
+}
+
+model PaymentClaim {
+  id              String             @id @default(cuid())
+  studentId       String
+  student         Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  invoiceId       String
+  invoice         Invoice            @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amount          Float
+  bankReference   String
+  depositDate     DateTime
+  note            String?
+  status          PaymentClaimStatus @default(PENDING)
+  createdAt       DateTime           @default(now())
+  reviewedById    String?
+  reviewedBy      User?              @relation("ClaimReviewer", fields: [reviewedById], references: [id])
+  reviewedAt      DateTime?
+  rejectionReason String?
+  paymentId       String?            @unique
+  payment         Payment?           @relation(fields: [paymentId], references: [id])
 }

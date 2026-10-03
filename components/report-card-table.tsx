@@ -13,6 +13,7 @@ export function ReportCardTable({
       <Table>
         <Thead>
           <Tr>
+            <Th>Code</Th>
             <Th>Unit</Th>
             <Th>Score</Th>
             <Th>Percent</Th>
@@ -23,6 +24,7 @@ export function ReportCardTable({
         <Tbody>
           {rows.map((row) => (
             <Tr key={row.subject}>
+              <Td className="text-slate-500">{row.code}</Td>
               <Td className="font-medium text-slate-900">{row.subject}</Td>
               <Td>
                 {row.totalScore} / {row.totalMax}
@@ -34,7 +36,7 @@ export function ReportCardTable({
           ))}
           {rows.length === 0 ? (
             <Tr>
-              <Td colSpan={5} className="text-center text-slate-400">
+              <Td colSpan={6} className="text-center text-slate-400">
                 No marks recorded for this semester
               </Td>
             </Tr>
@@ -43,7 +45,7 @@ export function ReportCardTable({
       </Table>
       {rows.length > 0 ? (
         <p className="text-sm font-medium text-slate-700">
-          Overall average: {overallPercent}%
+          Semester average: {overallPercent}%
         </p>
       ) : null}
     </div>
