@@ -30,12 +30,12 @@ async function main() {
   });
 
   const academicYear = await prisma.academicYear.upsert({
-    where: { name: "2026" },
+    where: { name: "2026/2027" },
     update: {},
     create: {
-      name: "2026",
-      startDate: new Date("2026-01-05"),
-      endDate: new Date("2026-11-27"),
+      name: "2026/2027",
+      startDate: new Date("2026-09-07"),
+      endDate: new Date("2027-07-30"),
       isCurrent: true,
     },
   });
@@ -45,8 +45,8 @@ async function main() {
     update: {},
     create: {
       name: "Semester 1",
-      startDate: new Date("2026-01-05"),
-      endDate: new Date("2026-04-03"),
+      startDate: new Date("2026-09-07"),
+      endDate: new Date("2026-12-18"),
       isCurrent: true,
       academicYearId: academicYear.id,
     },

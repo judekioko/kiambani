@@ -39,7 +39,10 @@ export function DashboardShell({
       </aside>
       <div className="flex flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-3 print:hidden">
-          <p className="text-sm font-medium text-slate-500 sm:hidden">{COLLEGE_SHORT_NAME}</p>
+          <p className="text-sm font-medium text-slate-700">
+            <span className="text-slate-400 sm:hidden">{COLLEGE_SHORT_NAME} · </span>
+            Hi, {userName.split(" ")[0]}
+          </p>
           <div className="ml-auto flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-medium text-slate-900">{userName}</p>

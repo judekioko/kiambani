@@ -7,6 +7,7 @@ import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { StudentStatusForm } from "@/components/forms/student-status-form";
 import { StudentContactForm } from "@/components/forms/student-contact-form";
+import { HostelForm } from "@/components/forms/hostel-form";
 import { computeReportCard } from "@/lib/report-card";
 import { ReportCardTable } from "@/components/report-card-table";
 
@@ -80,6 +81,19 @@ export default async function StudentDetailPage({
               hasLogin={Boolean(student.user)}
               initialEmail={student.user?.email ?? ""}
               initialPhone={student.user?.phone ?? ""}
+            />
+          </CardBody>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Hostel</CardTitle>
+          </CardHeader>
+          <CardBody className="text-sm">
+            <HostelForm
+              studentId={student.id}
+              hostelName={student.hostelName}
+              hostelRoom={student.hostelRoom}
             />
           </CardBody>
         </Card>

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { generateReceiptNo } from "@/lib/receipt";
+import { recordInvoicePayment } from "@/lib/finance";
 import {
   feeStructureSchema,
   generateInvoicesSchema,
@@ -110,40 +110,18 @@ export async function recordPayment(
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
-  const invoice = await prisma.invoice.findUnique({
-    where: { id: parsed.data.invoiceId },
-    include: { payments: true },
-  });
+  const invoice = await prisma.invoice.findUnique({ where: { id: parsed.data.invoiceId } });
   if (!invoice) return { error: "Invoice not found" };
 
-  await prisma.$transaction(async (tx) => {
-    const payment = await tx.payment.create({
-      data: {
-        invoiceId: invoice.id,
-        amount: parsed.data.amount,
-        method: parsed.data.method,
-        reference: parsed.data.reference,
-        recordedById: session.userId,
-      },
-    });
-
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        await tx.receipt.create({
-          data: { paymentId: payment.id, receiptNo: generateReceiptNo() },
-        });
-        break;
-      } catch {
-        if (attempt === 2) throw new Error("Could not generate a unique receipt number");
-      }
-    }
-
-    const totalPaid =
-      invoice.payments.reduce((sum, p) => sum + p.amount, 0) + parsed.data.amount;
-    const status = totalPaid >= invoice.totalAmount ? "PAID" : totalPaid > 0 ? "PARTIAL" : "UNPAID";
-
-    await tx.invoice.update({ where: { id: invoice.id }, data: { status } });
-  });
+  await prisma.$transaction((tx) =>
+    recordInvoicePayment(tx, {
+      invoiceId: invoice.id,
+      amount: parsed.data.amount,
+      method: parsed.data.method,
+      reference: parsed.data.reference,
+      recordedById: session.userId,
+    })
+  );
 
   revalidatePath("/accountant/invoices");
   revalidatePath("/accountant/payments");

@@ -3,10 +3,13 @@ import { DashboardShell, type NavItem } from "@/components/dashboard-shell";
 
 const navItems: NavItem[] = [
   { href: "/student", label: "Dashboard" },
-  { href: "/student/attendance", label: "Attendance" },
+  { href: "/student/registration", label: "Unit Registration" },
+  { href: "/student/exam-card", label: "Exam Card" },
   { href: "/student/grades", label: "Results" },
-  { href: "/student/fees", label: "Fees" },
-  { href: "/student/announcements", label: "Announcements" },
+  { href: "/student/fees", label: "Fee Statement" },
+  { href: "/student/pay", label: "Pay Fees" },
+  { href: "/student/attendance", label: "Attendance" },
+  { href: "/student/announcements", label: "News" },
   { href: "/student/events", label: "Events" },
 ];
 

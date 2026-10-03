@@ -6,6 +6,7 @@ const navItems: NavItem[] = [
   { href: "/accountant/fee-structures", label: "Fee Structures" },
   { href: "/accountant/invoices", label: "Invoices" },
   { href: "/accountant/payments", label: "Payments" },
+  { href: "/accountant/payment-confirmations", label: "Payment Confirmations" },
   { href: "/accountant/announcements", label: "Announcements" },
 ];
 

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 export type ReportCardRow = {
   subject: string;
+  code: string;
   totalScore: number;
   totalMax: number;
   percent: number;
@@ -20,20 +21,29 @@ export async function computeReportCard(studentId: string, termId: string) {
     orderBy: { id: "asc" },
   });
 
-  const bySubject = new Map<string, { totalScore: number; totalMax: number }>();
+  const bySubject = new Map<
+    string,
+    { subject: string; code: string; totalScore: number; totalMax: number }
+  >();
   for (const mark of marks) {
-    const key = mark.assessment.subject.name;
-    const entry = bySubject.get(key) ?? { totalScore: 0, totalMax: 0 };
+    const key = mark.assessment.subject.id;
+    const entry = bySubject.get(key) ?? {
+      subject: mark.assessment.subject.name,
+      code: mark.assessment.subject.code,
+      totalScore: 0,
+      totalMax: 0,
+    };
     entry.totalScore += mark.score;
     entry.totalMax += mark.assessment.maxScore;
     bySubject.set(key, entry);
   }
 
-  const rows: ReportCardRow[] = Array.from(bySubject.entries()).map(([subject, totals]) => {
+  const rows: ReportCardRow[] = Array.from(bySubject.values()).map((totals) => {
     const percent = totals.totalMax > 0 ? (totals.totalScore / totals.totalMax) * 100 : 0;
     const band = scale?.bands.find((b) => percent >= b.minPercent && percent <= b.maxPercent);
     return {
-      subject,
+      subject: totals.subject,
+      code: totals.code,
       totalScore: totals.totalScore,
       totalMax: totals.totalMax,
       percent: Math.round(percent * 10) / 10,
