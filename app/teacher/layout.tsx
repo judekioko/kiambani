@@ -4,7 +4,7 @@ import { DashboardShell, type NavItem } from "@/components/dashboard-shell";
 const navItems: NavItem[] = [
   { href: "/teacher", label: "Dashboard" },
   { href: "/teacher/attendance", label: "Attendance" },
-  { href: "/teacher/grades", label: "Grades" },
+  { href: "/teacher/grades", label: "Results" },
   { href: "/teacher/announcements", label: "Announcements" },
   { href: "/teacher/events", label: "Events" },
 ];
@@ -14,10 +14,10 @@ export default async function TeacherLayout({ children }: { children: React.Reac
 
   return (
     <DashboardShell
-      title="Teacher"
+      title="Trainer"
       navItems={navItems}
       userName={session.name}
-      userRole="Teacher"
+      userRole="Trainer"
     >
       {children}
     </DashboardShell>

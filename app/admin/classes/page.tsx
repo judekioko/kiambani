@@ -21,15 +21,15 @@ export default async function ClassesPage() {
 
   return (
     <div>
-      <PageHeader title="Classes" description="Classes for the current school structure." />
+      <PageHeader title="Courses" description="Courses offered for the current academic year." />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <Table>
             <Thead>
               <Tr>
-                <Th>Class</Th>
+                <Th>Course</Th>
                 <Th>Academic Year</Th>
-                <Th>Class Teacher</Th>
+                <Th>Course Coordinator</Th>
                 <Th>Students</Th>
               </Tr>
             </Thead>
@@ -52,7 +52,7 @@ export default async function ClassesPage() {
               {classes.length === 0 ? (
                 <Tr>
                   <Td colSpan={4} className="text-center text-slate-400">
-                    No classes yet
+                    No courses yet
                   </Td>
                 </Tr>
               ) : null}
@@ -61,12 +61,12 @@ export default async function ClassesPage() {
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>New class</CardTitle>
+            <CardTitle>New course</CardTitle>
           </CardHeader>
           <CardBody>
             {academicYears.length === 0 ? (
               <p className="text-sm text-slate-500">
-                Create an academic year first before adding classes.
+                Create an academic year first before adding courses.
               </p>
             ) : (
               <ClassForm academicYears={academicYears} teachers={teachers} />

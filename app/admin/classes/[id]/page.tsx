@@ -34,22 +34,22 @@ export default async function ClassDetailPage({
     <div>
       <PageHeader
         title={cls.name}
-        description={`${cls.academicYear.name} · Class teacher: ${cls.classTeacher?.name ?? "Unassigned"}`}
+        description={`${cls.academicYear.name} · Course Coordinator: ${cls.classTeacher?.name ?? "Unassigned"}`}
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle>Subject teachers</CardTitle>
+              <CardTitle>Unit trainers</CardTitle>
             </CardHeader>
             <CardBody>
               <Table>
                 <Thead>
                   <Tr>
-                    <Th>Term</Th>
-                    <Th>Subject</Th>
-                    <Th>Teacher</Th>
+                    <Th>Semester</Th>
+                    <Th>Unit</Th>
+                    <Th>Trainer</Th>
                     <Th></Th>
                   </Tr>
                 </Thead>
@@ -76,7 +76,7 @@ export default async function ClassDetailPage({
                   {cls.classSubjectTeachers.length === 0 ? (
                     <Tr>
                       <Td colSpan={4} className="text-center text-slate-400">
-                        No subject teachers assigned yet
+                        No unit trainers assigned yet
                       </Td>
                     </Tr>
                   ) : null}
@@ -111,7 +111,7 @@ export default async function ClassDetailPage({
                   {cls.students.length === 0 ? (
                     <Tr>
                       <Td colSpan={3} className="text-center text-slate-400">
-                        No students in this class yet
+                        No students in this course yet
                       </Td>
                     </Tr>
                   ) : null}
@@ -123,12 +123,12 @@ export default async function ClassDetailPage({
 
         <Card>
           <CardHeader>
-            <CardTitle>Assign subject teacher</CardTitle>
+            <CardTitle>Assign unit trainer</CardTitle>
           </CardHeader>
           <CardBody>
             {cls.academicYear.terms.length === 0 || subjects.length === 0 || teachers.length === 0 ? (
               <p className="text-sm text-slate-500">
-                You need at least one term, one subject, and one teacher before making
+                You need at least one semester, one unit, and one trainer before making
                 assignments.
               </p>
             ) : (

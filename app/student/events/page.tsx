@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { getGuardianStudents } from "@/lib/guardian";
+import { getMyStudents } from "@/lib/my-student";
 import { PageHeader } from "@/components/page-header";
 import { EventList } from "@/components/event-list";
 
-export default async function ParentEventsPage() {
-  const session = await requireRole("PARENT");
-  const students = await getGuardianStudents(session.userId);
+export default async function StudentEventsPage() {
+  const session = await requireRole("STUDENT");
+  const students = await getMyStudents(session.userId);
   const classIds = students.map((s) => s.classId).filter((id): id is string => Boolean(id));
 
   const events = await prisma.schoolEvent.findMany({
@@ -22,7 +22,7 @@ export default async function ParentEventsPage() {
     <div>
       <PageHeader
         title="Events & Activities"
-        description="Upcoming activities from the school and your child's class."
+        description="Upcoming activities from the college and your course."
       />
       <EventList
         items={events.map((e) => ({

@@ -34,6 +34,13 @@ export async function loginAction(
     return { error: "Invalid email or password" };
   }
 
+  if (user.role === "PARENT") {
+    return {
+      error:
+        "Guardian accounts are no longer used. Students sign in with their own account — please contact the college office.",
+    };
+  }
+
   await createSession({
     userId: user.id,
     role: user.role,

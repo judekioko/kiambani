@@ -44,13 +44,13 @@ export default async function TeacherAttendancePage({
 
   return (
     <div>
-      <PageHeader title="Attendance" description="Mark daily attendance for your class." />
+      <PageHeader title="Attendance" description="Mark daily attendance for your course." />
 
       {classes.length === 0 ? (
         <Card>
           <CardBody>
             <p className="text-sm text-slate-500">
-              You are not assigned as a class teacher for any class yet.
+              You are not assigned as a course coordinator for any course yet.
             </p>
           </CardBody>
         </Card>
@@ -60,7 +60,7 @@ export default async function TeacherAttendancePage({
             <CardBody>
               <form className="flex flex-wrap items-end gap-3" method="get">
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-500">Class</label>
+                  <label className="mb-1 block text-xs font-medium text-slate-500">Course</label>
                   <Select name="classId" defaultValue={classId}>
                     {classes.map((cls) => (
                       <option key={cls.id} value={cls.id}>
@@ -84,7 +84,7 @@ export default async function TeacherAttendancePage({
             <Card>
               <CardBody>
                 <p className="text-sm text-slate-500">
-                  No current term is set. Ask an administrator to mark a term as current.
+                  No current semester is set. Ask an administrator to mark a semester as current.
                 </p>
               </CardBody>
             </Card>

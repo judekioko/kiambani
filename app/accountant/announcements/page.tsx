@@ -12,7 +12,7 @@ export default async function AccountantAnnouncementsPage() {
 
   return (
     <div>
-      <PageHeader title="Announcements" description="School-wide updates." />
+      <PageHeader title="Announcements" description="College-wide updates." />
       <AnnouncementList
         items={announcements.map((a) => ({
           id: a.id,

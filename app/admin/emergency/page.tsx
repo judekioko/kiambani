@@ -16,7 +16,7 @@ export default async function EmergencyPage() {
     <div>
       <PageHeader
         title="Emergency Broadcast"
-        description="Notify every parent immediately, in-app and by SMS."
+        description="Notify every student immediately, in-app and by SMS."
       />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">

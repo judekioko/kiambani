@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/page-header";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/table";
+import { feeLabel } from "@/lib/fee-labels";
 
 export default async function AccountantFeeStructuresPage() {
   const structures = await prisma.feeStructure.findMany({
@@ -12,13 +13,13 @@ export default async function AccountantFeeStructuresPage() {
     <div>
       <PageHeader
         title="Fee Structures"
-        description="Per-class fee structures set by the administrator."
+        description="Per-course fee structures set by the administrator."
       />
       <Table>
         <Thead>
           <Tr>
-            <Th>Class</Th>
-            <Th>Term</Th>
+            <Th>Course</Th>
+            <Th>Semester</Th>
             <Th>Items</Th>
             <Th>Total</Th>
           </Tr>
@@ -28,7 +29,7 @@ export default async function AccountantFeeStructuresPage() {
             <Tr key={s.id}>
               <Td className="font-medium text-slate-900">{s.class.name}</Td>
               <Td>{s.term.name}</Td>
-              <Td>{s.items.map((i) => i.name).join(", ")}</Td>
+              <Td>{s.items.map((i) => feeLabel(i.name)).join(", ")}</Td>
               <Td>{s.items.reduce((sum, i) => sum + i.amount, 0).toLocaleString()}</Td>
             </Tr>
           ))}

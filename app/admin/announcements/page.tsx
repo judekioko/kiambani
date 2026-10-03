@@ -16,7 +16,7 @@ export default async function AdminAnnouncementsPage() {
 
   return (
     <div>
-      <PageHeader title="Announcements" description="Post updates to the whole school or a group." />
+      <PageHeader title="Announcements" description="Post updates to the whole college or a group." />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <AnnouncementList

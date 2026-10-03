@@ -48,15 +48,15 @@ export function AnnouncementForm({
             onChange={(e) => setAudience(e.target.value)}
           >
             <option value="ALL">Everyone</option>
-            <option value="TEACHERS">Teachers</option>
-            <option value="PARENTS">Parents</option>
-            <option value="CLASS">A specific class</option>
+            <option value="TEACHERS">Trainers</option>
+            <option value="PARENTS">Students</option>
+            <option value="CLASS">A specific course</option>
           </Select>
         </div>
       )}
       {audience === "CLASS" ? (
         <div>
-          <Label htmlFor="classId">Class</Label>
+          <Label htmlFor="classId">Course</Label>
           <Select id="classId" name="classId" required>
             {classes.map((cls) => (
               <option key={cls.id} value={cls.id}>

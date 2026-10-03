@@ -5,7 +5,7 @@ import type { ReceiptData } from "@/components/receipt-view";
 export function generateReceiptNo(): string {
   const year = new Date().getFullYear();
   const rand = randomBytes(5).toString("hex").toUpperCase();
-  return `KMB-${year}-${rand}`;
+  return `MTVC-${year}-${rand}`;
 }
 
 export type PublicReceiptInfo = {

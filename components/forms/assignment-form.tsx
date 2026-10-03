@@ -26,7 +26,7 @@ export function AssignmentForm({
       {state?.error ? <Alert variant="error">{state.error}</Alert> : null}
       {state?.success ? <Alert variant="success">{state.success}</Alert> : null}
       <div>
-        <Label htmlFor="termId">Term</Label>
+        <Label htmlFor="termId">Semester</Label>
         <Select id="termId" name="termId" required>
           {terms.map((term) => (
             <option key={term.id} value={term.id}>
@@ -36,7 +36,7 @@ export function AssignmentForm({
         </Select>
       </div>
       <div>
-        <Label htmlFor="subjectId">Subject</Label>
+        <Label htmlFor="subjectId">Unit</Label>
         <Select id="subjectId" name="subjectId" required>
           {subjects.map((subject) => (
             <option key={subject.id} value={subject.id}>
@@ -46,7 +46,7 @@ export function AssignmentForm({
         </Select>
       </div>
       <div>
-        <Label htmlFor="teacherId">Teacher</Label>
+        <Label htmlFor="teacherId">Trainer</Label>
         <Select id="teacherId" name="teacherId" required>
           {teachers.map((teacher) => (
             <option key={teacher.id} value={teacher.id}>

@@ -79,7 +79,7 @@ export async function createTerm(
   });
 
   revalidatePath(`/admin/academic-years/${parsed.data.academicYearId}`);
-  return { success: "Term created" };
+  return { success: "Semester created" };
 }
 
 export async function createSubject(
@@ -94,11 +94,11 @@ export async function createSubject(
   if (!parsed.success) return { error: firstError(parsed.error) };
 
   const existing = await prisma.subject.findUnique({ where: { code: parsed.data.code } });
-  if (existing) return { error: "A subject with this code already exists" };
+  if (existing) return { error: "A unit with this code already exists" };
 
   await prisma.subject.create({ data: parsed.data });
   revalidatePath("/admin/subjects");
-  return { success: "Subject created" };
+  return { success: "Unit created" };
 }
 
 export async function createSchoolClass(
@@ -123,7 +123,7 @@ export async function createSchoolClass(
   });
 
   revalidatePath("/admin/classes");
-  return { success: "Class created" };
+  return { success: "Course created" };
 }
 
 export async function assignClassSubjectTeacher(

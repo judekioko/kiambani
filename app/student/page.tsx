@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { getGuardianStudents } from "@/lib/guardian";
+import { getMyStudents } from "@/lib/my-student";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventList } from "@/components/event-list";
 
-export default async function ParentDashboardPage() {
-  const session = await requireRole("PARENT");
-  const students = await getGuardianStudents(session.userId);
+export default async function StudentDashboardPage() {
+  const session = await requireRole("STUDENT");
+  const students = await getMyStudents(session.userId);
 
   const balances = await Promise.all(
     students.map(async (student) => {
@@ -49,7 +49,10 @@ export default async function ParentDashboardPage() {
             </CardHeader>
             <CardBody className="space-y-2 text-sm">
               <p>
-                <span className="text-slate-500">Class:</span>{" "}
+                <span className="text-slate-500">Admission No.:</span> {student.admissionNo}
+              </p>
+              <p>
+                <span className="text-slate-500">Course:</span>{" "}
                 {student.class?.name ?? "Unassigned"}
               </p>
               <p>
@@ -57,13 +60,13 @@ export default async function ParentDashboardPage() {
                 {balances[i].toLocaleString()}
               </p>
               <div className="flex gap-3 pt-2 text-emerald-700">
-                <Link href="/parent/attendance" className="hover:underline">
+                <Link href="/student/attendance" className="hover:underline">
                   Attendance
                 </Link>
-                <Link href="/parent/grades" className="hover:underline">
-                  Grades
+                <Link href="/student/grades" className="hover:underline">
+                  Results
                 </Link>
-                <Link href="/parent/fees" className="hover:underline">
+                <Link href="/student/fees" className="hover:underline">
                   Fees
                 </Link>
               </div>
@@ -71,7 +74,9 @@ export default async function ParentDashboardPage() {
           </Card>
         ))}
         {students.length === 0 ? (
-          <p className="text-sm text-slate-500">No children linked to your account yet.</p>
+          <p className="text-sm text-slate-500">
+            Your account is not linked to a student record yet. Please contact the college office.
+          </p>
         ) : null}
       </div>
       <div className="mt-6">

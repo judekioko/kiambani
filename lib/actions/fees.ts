@@ -26,7 +26,7 @@ export async function createFeeStructure(
   const existing = await prisma.feeStructure.findUnique({
     where: { classId_termId: parsed.data },
   });
-  if (existing) return { error: "A fee structure already exists for this class and term" };
+  if (existing) return { error: "A fee structure already exists for this course and semester" };
 
   const items = feeItemNames
     .map((name) => ({ name, amount: Number(formData.get(`amount_${name}`) ?? 0) }))
@@ -62,12 +62,12 @@ export async function generateInvoicesForClass(
     where: { classId_termId: { classId: parsed.data.classId, termId: parsed.data.termId } },
     include: { items: true },
   });
-  if (!structure) return { error: "No fee structure exists for this class and term yet" };
+  if (!structure) return { error: "No fee structure exists for this course and semester yet" };
 
   const students = await prisma.student.findMany({
     where: { classId: parsed.data.classId, status: "ACTIVE" },
   });
-  if (students.length === 0) return { error: "No active students in this class" };
+  if (students.length === 0) return { error: "No active students in this course" };
 
   const totalAmount = structure.items.reduce((sum, item) => sum + item.amount, 0);
   const dueDate = new Date(parsed.data.dueDate);

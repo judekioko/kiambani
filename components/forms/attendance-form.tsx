@@ -59,7 +59,7 @@ export function AttendanceForm({
         </Tbody>
       </Table>
       {students.length === 0 ? (
-        <p className="text-sm text-slate-400">No students in this class</p>
+        <p className="text-sm text-slate-400">No students in this course</p>
       ) : (
         <Button type="submit" disabled={pending}>
           {pending ? "Saving..." : "Save attendance"}

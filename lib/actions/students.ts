@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { createStudentSchema, updateGuardianContactSchema } from "@/lib/validators/student";
+import { createStudentSchema, updateStudentContactSchema } from "@/lib/validators/student";
 import { generateTempPassword } from "@/lib/password";
 import type { ActionState } from "./types";
 
@@ -21,10 +21,8 @@ export async function createStudent(
     dob: formData.get("dob"),
     gender: formData.get("gender"),
     classId: formData.get("classId") || undefined,
-    guardianName: formData.get("guardianName"),
-    guardianEmail: formData.get("guardianEmail"),
-    guardianPhone: formData.get("guardianPhone"),
-    guardianRelationship: formData.get("guardianRelationship"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const data = parsed.data;
@@ -34,28 +32,10 @@ export async function createStudent(
   });
   if (existingAdmission) return { error: "A student with this admission number already exists" };
 
-  let guardian = await prisma.user.findUnique({ where: { email: data.guardianEmail } });
-  let tempPassword: string | null = null;
+  const existingUser = await prisma.user.findUnique({ where: { email: data.email } });
+  if (existingUser) return { error: "This email is already used by another account" };
 
-  if (!guardian) {
-    tempPassword = generateTempPassword();
-    guardian = await prisma.user.create({
-      data: {
-        name: data.guardianName,
-        email: data.guardianEmail,
-        phone: data.guardianPhone,
-        role: "PARENT",
-        passwordHash: await bcrypt.hash(tempPassword, 10),
-      },
-    });
-  } else if (guardian.role !== "PARENT") {
-    return { error: "This email belongs to a non-parent account already" };
-  } else if (!guardian.phone) {
-    guardian = await prisma.user.update({
-      where: { id: guardian.id },
-      data: { phone: data.guardianPhone },
-    });
-  }
+  const tempPassword = generateTempPassword();
 
   await prisma.student.create({
     data: {
@@ -64,46 +44,88 @@ export async function createStudent(
       admissionNo: data.admissionNo,
       dob: new Date(data.dob),
       gender: data.gender,
-      classId: data.classId || null,
-      guardians: {
+      ...(data.classId ? { class: { connect: { id: data.classId } } } : {}),
+      user: {
         create: {
-          guardianId: guardian.id,
-          relationship: data.guardianRelationship,
-          isPrimary: true,
+          name: `${data.firstName} ${data.lastName}`,
+          email: data.email,
+          phone: data.phone,
+          role: "STUDENT",
+          passwordHash: await bcrypt.hash(tempPassword, 10),
         },
       },
     },
   });
 
   revalidatePath("/admin/students");
-  return {
-    success: tempPassword
-      ? `Student created. New guardian login: ${data.guardianEmail} / ${tempPassword}`
-      : "Student created and linked to existing guardian",
-  };
+  return { success: `Student enrolled. Login: ${data.email} / ${tempPassword}` };
 }
 
-export async function updateGuardianContact(
+export async function createStudentLogin(
   _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> {
   await requireRole("ADMIN");
 
-  const parsed = updateGuardianContactSchema.safeParse({
-    guardianId: formData.get("guardianId"),
+  const parsed = updateStudentContactSchema.safeParse({
     studentId: formData.get("studentId"),
     email: formData.get("email"),
     phone: formData.get("phone"),
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const { guardianId, studentId, email, phone } = parsed.data;
+  const { studentId, email, phone } = parsed.data;
+
+  const student = await prisma.student.findUnique({ where: { id: studentId } });
+  if (!student) return { error: "Student not found" };
+  if (student.userId) return { error: "This student already has a login" };
+
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+  if (existingUser) return { error: "This email is already used by another account" };
+
+  const tempPassword = generateTempPassword();
+
+  await prisma.student.update({
+    where: { id: studentId },
+    data: {
+      user: {
+        create: {
+          name: `${student.firstName} ${student.lastName}`,
+          email,
+          phone,
+          role: "STUDENT",
+          passwordHash: await bcrypt.hash(tempPassword, 10),
+        },
+      },
+    },
+  });
+
+  revalidatePath(`/admin/students/${studentId}`);
+  return { success: `Login created: ${email} / ${tempPassword}` };
+}
+
+export async function updateStudentContact(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  await requireRole("ADMIN");
+
+  const parsed = updateStudentContactSchema.safeParse({
+    studentId: formData.get("studentId"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  const { studentId, email, phone } = parsed.data;
+
+  const student = await prisma.student.findUnique({ where: { id: studentId } });
+  if (!student?.userId) return { error: "This student has no login yet" };
 
   const existingWithEmail = await prisma.user.findUnique({ where: { email } });
-  if (existingWithEmail && existingWithEmail.id !== guardianId) {
+  if (existingWithEmail && existingWithEmail.id !== student.userId) {
     return { error: "This email is already used by another account" };
   }
 
-  await prisma.user.update({ where: { id: guardianId }, data: { email, phone } });
+  await prisma.user.update({ where: { id: student.userId }, data: { email, phone } });
 
   revalidatePath(`/admin/students/${studentId}`);
   return { success: "Contact details updated" };

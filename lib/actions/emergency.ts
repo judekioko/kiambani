@@ -25,11 +25,11 @@ export async function sendEmergencyBroadcast(
     },
   });
 
-  const guardians = await prisma.user.findMany({
-    where: { role: "PARENT", active: true, phone: { not: null } },
+  const students = await prisma.user.findMany({
+    where: { role: "STUDENT", active: true, phone: { not: null } },
     select: { phone: true },
   });
-  const phones = guardians.map((g) => g.phone).filter((p): p is string => Boolean(p));
+  const phones = students.map((s) => s.phone).filter((p): p is string => Boolean(p));
 
   const result = await sendSms(phones, `${title}: ${message}`);
 
@@ -48,11 +48,11 @@ export async function sendEmergencyBroadcast(
 
   if (!result.configured) {
     return {
-      success: `Announcement posted. SMS is not configured yet (${phones.length} guardian phone numbers on file) — add AFRICASTALKING_API_KEY to send real texts.`,
+      success: `Announcement posted. SMS is not configured yet (${phones.length} student phone numbers on file) — add AFRICASTALKING_API_KEY to send real texts.`,
     };
   }
   if (result.error) {
     return { error: `Announcement posted, but SMS failed: ${result.error}` };
   }
-  return { success: `Announcement posted and SMS sent to ${result.sent} of ${phones.length} guardians.` };
+  return { success: `Announcement posted and SMS sent to ${result.sent} of ${phones.length} students.` };
 }

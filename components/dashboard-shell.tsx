@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { logoutAction } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/button";
+import { COLLEGE_NAME, COLLEGE_SHORT_NAME } from "@/lib/brand";
 
 export type NavItem = { href: string; label: string };
 
@@ -21,7 +22,7 @@ export function DashboardShell({
     <div className="flex min-h-screen">
       <aside className="hidden w-60 flex-col border-r border-slate-200 bg-white sm:flex print:hidden">
         <div className="border-b border-slate-200 px-5 py-4">
-          <p className="text-base font-semibold text-slate-900">Kiambani School</p>
+          <p className="text-sm font-semibold leading-snug text-slate-900">{COLLEGE_NAME}</p>
           <p className="text-xs text-slate-500">{title}</p>
         </div>
         <nav className="flex-1 space-y-1 px-3 py-4">
@@ -38,7 +39,7 @@ export function DashboardShell({
       </aside>
       <div className="flex flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-3 print:hidden">
-          <p className="text-sm font-medium text-slate-500 sm:hidden">Kiambani School</p>
+          <p className="text-sm font-medium text-slate-500 sm:hidden">{COLLEGE_SHORT_NAME}</p>
           <div className="ml-auto flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-medium text-slate-900">{userName}</p>

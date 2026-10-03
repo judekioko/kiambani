@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { getGuardianStudents } from "@/lib/guardian";
+import { getMyStudents } from "@/lib/my-student";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/table";
@@ -13,9 +13,9 @@ const statusTone = {
   PAID: "emerald",
 } as const;
 
-export default async function ParentFeesPage() {
-  const session = await requireRole("PARENT");
-  const students = await getGuardianStudents(session.userId);
+export default async function StudentFeesPage() {
+  const session = await requireRole("STUDENT");
+  const students = await getMyStudents(session.userId);
 
   const invoicesByStudent = await Promise.all(
     students.map((student) =>
@@ -29,7 +29,7 @@ export default async function ParentFeesPage() {
 
   return (
     <div>
-      <PageHeader title="Fees" description="Invoices and balances for your children." />
+      <PageHeader title="Fees" description="Your fee invoices, balances and receipts." />
       <div className="space-y-6">
         {students.map((student, i) => (
           <Card key={student.id}>
@@ -42,7 +42,7 @@ export default async function ParentFeesPage() {
               <Table>
                 <Thead>
                   <Tr>
-                    <Th>Term</Th>
+                    <Th>Semester</Th>
                     <Th>Total</Th>
                     <Th>Paid</Th>
                     <Th>Balance</Th>
@@ -69,7 +69,7 @@ export default async function ParentFeesPage() {
                               .map((p) => (
                                 <Link
                                   key={p.id}
-                                  href={`/parent/receipts/${p.receipt!.id}`}
+                                  href={`/student/receipts/${p.receipt!.id}`}
                                   className="text-emerald-700 hover:underline"
                                 >
                                   {p.paidAt.toLocaleDateString()}
@@ -93,7 +93,7 @@ export default async function ParentFeesPage() {
           </Card>
         ))}
         {students.length === 0 ? (
-          <p className="text-sm text-slate-500">No children linked to your account.</p>
+          <p className="text-sm text-slate-500">Your account is not linked to a student record yet. Please contact the college office.</p>
         ) : null}
       </div>
     </div>

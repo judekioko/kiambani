@@ -38,13 +38,13 @@ export default async function AdminAttendancePage({
 
   return (
     <div>
-      <PageHeader title="Attendance overview" description="Review attendance by class and date." />
+      <PageHeader title="Attendance overview" description="Review attendance by course and date." />
       <div className="space-y-6">
         <Card>
           <CardBody>
             <form className="flex flex-wrap items-end gap-3" method="get">
               <div>
-                <label className="mb-1 block text-xs font-medium text-slate-500">Class</label>
+                <label className="mb-1 block text-xs font-medium text-slate-500">Course</label>
                 <Select name="classId" defaultValue={classId}>
                   {classes.map((cls) => (
                     <option key={cls.id} value={cls.id}>
@@ -85,7 +85,7 @@ export default async function AdminAttendancePage({
             {records.length === 0 ? (
               <Tr>
                 <Td colSpan={2} className="text-center text-slate-400">
-                  No attendance recorded for this class and date
+                  No attendance recorded for this course and date
                 </Td>
               </Tr>
             ) : null}

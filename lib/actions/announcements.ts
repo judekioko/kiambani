@@ -22,16 +22,16 @@ export async function createAnnouncement(
 
   if (session.role === "TEACHER") {
     if (parsed.data.audience !== "CLASS" || !parsed.data.classId) {
-      return { error: "Teachers can only post announcements to their own class" };
+      return { error: "Trainers can only post announcements to their own course" };
     }
     const cls = await prisma.schoolClass.findUnique({ where: { id: parsed.data.classId } });
     if (!cls || cls.classTeacherId !== session.userId) {
-      return { error: "You are not the class teacher for this class" };
+      return { error: "You are not the coordinator of this course" };
     }
   }
 
   if (parsed.data.audience === "CLASS" && !parsed.data.classId) {
-    return { error: "Select a class for a class-scoped announcement" };
+    return { error: "Select a course for a course-scoped announcement" };
   }
 
   await prisma.announcement.create({
@@ -47,6 +47,6 @@ export async function createAnnouncement(
   revalidatePath("/admin/announcements");
   revalidatePath("/teacher/announcements");
   revalidatePath("/accountant/announcements");
-  revalidatePath("/parent/announcements");
+  revalidatePath("/student/announcements");
   return { success: "Announcement posted" };
 }

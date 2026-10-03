@@ -72,7 +72,7 @@ export async function createAssessment(
         teacherId: session.userId,
       },
     });
-    if (!assignment) return { error: "You are not assigned to teach this subject/class/term" };
+    if (!assignment) return { error: "You are not assigned to train this unit/course/semester" };
   }
 
   await prisma.assessment.create({ data: parsed.data });
@@ -98,7 +98,7 @@ export async function saveMarks(
         teacherId: session.userId,
       },
     });
-    if (!assignment) return { error: "You are not assigned to teach this subject/class/term" };
+    if (!assignment) return { error: "You are not assigned to train this unit/course/semester" };
   }
 
   const studentIds = formData.getAll("studentId").map(String);

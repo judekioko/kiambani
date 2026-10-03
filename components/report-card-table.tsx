@@ -13,7 +13,7 @@ export function ReportCardTable({
       <Table>
         <Thead>
           <Tr>
-            <Th>Subject</Th>
+            <Th>Unit</Th>
             <Th>Score</Th>
             <Th>Percent</Th>
             <Th>Grade</Th>
@@ -35,7 +35,7 @@ export function ReportCardTable({
           {rows.length === 0 ? (
             <Tr>
               <Td colSpan={5} className="text-center text-slate-400">
-                No marks recorded for this term
+                No marks recorded for this semester
               </Td>
             </Tr>
           ) : null}

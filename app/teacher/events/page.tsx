@@ -28,7 +28,7 @@ export default async function TeacherEventsPage() {
 
   return (
     <div>
-      <PageHeader title="Events & Activities" description="School-wide and your class activities." />
+      <PageHeader title="Events & Activities" description="College-wide and your course activities." />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <EventList
@@ -46,12 +46,12 @@ export default async function TeacherEventsPage() {
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>New class event</CardTitle>
+            <CardTitle>New course event</CardTitle>
           </CardHeader>
           <CardBody>
             {myClasses.length === 0 ? (
               <p className="text-sm text-slate-500">
-                You are not a class teacher for any class yet.
+                You are not a course coordinator for any course yet.
               </p>
             ) : (
               <EventForm classes={myClasses} restrictToClass />

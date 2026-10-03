@@ -6,6 +6,7 @@ import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { PaymentForm } from "@/components/forms/payment-form";
+import { feeLabel } from "@/lib/fee-labels";
 
 const statusTone = {
   UNPAID: "rose",
@@ -58,7 +59,7 @@ export default async function InvoiceDetailPage({
                 <Tbody>
                   {invoice.items.map((item) => (
                     <Tr key={item.id}>
-                      <Td>{item.name}</Td>
+                      <Td>{feeLabel(item.name)}</Td>
                       <Td>{item.amount.toLocaleString()}</Td>
                     </Tr>
                   ))}

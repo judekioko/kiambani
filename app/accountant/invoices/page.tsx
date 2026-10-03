@@ -32,7 +32,7 @@ export default async function InvoicesPage() {
             <Thead>
               <Tr>
                 <Th>Student</Th>
-                <Th>Term</Th>
+                <Th>Semester</Th>
                 <Th>Total</Th>
                 <Th>Paid</Th>
                 <Th>Status</Th>
@@ -78,7 +78,7 @@ export default async function InvoicesPage() {
           </CardHeader>
           <CardBody>
             {classes.length === 0 || terms.length === 0 ? (
-              <p className="text-sm text-slate-500">No classes or terms yet.</p>
+              <p className="text-sm text-slate-500">No courses or semesters yet.</p>
             ) : (
               <GenerateInvoicesForm classes={classes} terms={terms} />
             )}

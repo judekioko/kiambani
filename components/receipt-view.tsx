@@ -1,5 +1,6 @@
 import { Card, CardBody } from "@/components/ui/card";
 import { PrintButton } from "@/components/print-button";
+import { COLLEGE_NAME } from "@/lib/brand";
 
 export type ReceiptData = {
   receiptNo: string;
@@ -26,7 +27,7 @@ export function ReceiptView({ data }: { data: ReceiptData }) {
       <Card className="print:border-none print:shadow-none">
         <CardBody>
           <div className="mb-4 text-center">
-            <h1 className="text-lg font-semibold text-slate-900">Kiambani School</h1>
+            <h1 className="text-lg font-semibold text-slate-900">{COLLEGE_NAME}</h1>
             <p className="text-sm text-slate-500">Official Payment Receipt</p>
           </div>
           <div className="mb-4 flex items-center justify-between border-y border-slate-200 py-2 text-sm">
@@ -47,11 +48,11 @@ export function ReceiptView({ data }: { data: ReceiptData }) {
               <dd>{data.admissionNo}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500">Class</dt>
+              <dt className="text-slate-500">Course</dt>
               <dd>{data.className}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-500">Term</dt>
+              <dt className="text-slate-500">Semester</dt>
               <dd>{data.termName}</dd>
             </div>
             <div className="flex justify-between">
@@ -71,7 +72,7 @@ export function ReceiptView({ data }: { data: ReceiptData }) {
               <span>{data.amount.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-slate-500">
-              <span>Term total</span>
+              <span>Semester total</span>
               <span>{data.totalAmount.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-slate-500">

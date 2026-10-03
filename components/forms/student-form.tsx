@@ -43,7 +43,7 @@ export function StudentForm({ classes }: { classes: { id: string; name: string }
         </div>
       </div>
       <div>
-        <Label htmlFor="classId">Class</Label>
+        <Label htmlFor="classId">Course</Label>
         <Select id="classId" name="classId" defaultValue="">
           <option value="">Unassigned</option>
           {classes.map((cls) => (
@@ -54,36 +54,23 @@ export function StudentForm({ classes }: { classes: { id: string; name: string }
         </Select>
       </div>
       <hr className="border-slate-200" />
-      <p className="text-sm font-medium text-slate-700">Primary guardian</p>
+      <p className="text-sm font-medium text-slate-700">Student login &amp; contact</p>
       <div>
-        <Label htmlFor="guardianName">Guardian name</Label>
-        <Input id="guardianName" name="guardianName" required />
-      </div>
-      <div>
-        <Label htmlFor="guardianEmail">Guardian email</Label>
-        <Input id="guardianEmail" name="guardianEmail" type="email" required />
+        <Label htmlFor="email">Student email</Label>
+        <Input id="email" name="email" type="email" required />
         <p className="mt-1 text-xs text-slate-400">
-          If this email doesn&apos;t exist yet, a new parent login is created automatically.
+          Used to sign in to the portal. A password is generated automatically.
         </p>
       </div>
       <div>
-        <Label htmlFor="guardianPhone">Guardian phone</Label>
-        <Input id="guardianPhone" name="guardianPhone" type="tel" placeholder="e.g. +254712345678" required />
+        <Label htmlFor="phone">Student phone</Label>
+        <Input id="phone" name="phone" type="tel" placeholder="e.g. +254712345678" required />
         <p className="mt-1 text-xs text-slate-400">
           Used for emergency SMS alerts, so this must be a real, reachable number.
         </p>
       </div>
-      <div>
-        <Label htmlFor="guardianRelationship">Relationship</Label>
-        <Input
-          id="guardianRelationship"
-          name="guardianRelationship"
-          placeholder="e.g. Mother, Father, Guardian"
-          required
-        />
-      </div>
       <Button type="submit" disabled={pending}>
-        {pending ? "Saving..." : "Create student"}
+        {pending ? "Saving..." : "Enrol student"}
       </Button>
     </form>
   );

@@ -9,7 +9,7 @@ export default async function SubjectsPage() {
 
   return (
     <div>
-      <PageHeader title="Subjects" description="The subjects taught across the school." />
+      <PageHeader title="Units" description="The units taught across the college." />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <Table>
@@ -29,7 +29,7 @@ export default async function SubjectsPage() {
               {subjects.length === 0 ? (
                 <Tr>
                   <Td colSpan={2} className="text-center text-slate-400">
-                    No subjects yet
+                    No units yet
                   </Td>
                 </Tr>
               ) : null}
@@ -38,7 +38,7 @@ export default async function SubjectsPage() {
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>New subject</CardTitle>
+            <CardTitle>New unit</CardTitle>
           </CardHeader>
           <CardBody>
             <SubjectForm />

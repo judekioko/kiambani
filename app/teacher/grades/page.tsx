@@ -26,16 +26,16 @@ export default async function TeacherGradesPage() {
 
   return (
     <div>
-      <PageHeader title="Grades" description="Create assessments and enter marks." />
+      <PageHeader title="Results" description="Create assessments and enter marks." />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <Table>
             <Thead>
               <Tr>
                 <Th>Assessment</Th>
-                <Th>Class</Th>
-                <Th>Subject</Th>
-                <Th>Term</Th>
+                <Th>Course</Th>
+                <Th>Unit</Th>
+                <Th>Semester</Th>
                 <Th>Marks entered</Th>
               </Tr>
             </Thead>
@@ -73,7 +73,7 @@ export default async function TeacherGradesPage() {
           <CardBody>
             {assignments.length === 0 ? (
               <p className="text-sm text-slate-500">
-                You have not been assigned to teach any class/subject yet.
+                You have not been assigned to train any course/unit yet.
               </p>
             ) : (
               <AssessmentForm
