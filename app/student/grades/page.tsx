@@ -1,14 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { getGuardianStudents } from "@/lib/guardian";
+import { getMyStudents } from "@/lib/my-student";
 import { computeReportCard } from "@/lib/report-card";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { ReportCardTable } from "@/components/report-card-table";
 
-export default async function ParentGradesPage() {
-  const session = await requireRole("PARENT");
-  const students = await getGuardianStudents(session.userId);
+export default async function StudentGradesPage() {
+  const session = await requireRole("STUDENT");
+  const students = await getMyStudents(session.userId);
   const currentTerm = await prisma.term.findFirst({ where: { isCurrent: true } });
 
   const reportCards = currentTerm
@@ -18,8 +18,8 @@ export default async function ParentGradesPage() {
   return (
     <div>
       <PageHeader
-        title="Grades"
-        description={currentTerm ? `Report card for ${currentTerm.name}` : "No current term set"}
+        title="Results"
+        description={currentTerm ? `Your results for ${currentTerm.name}` : "No current semester set"}
       />
       <div className="space-y-6">
         {students.map((student, i) => (
@@ -36,13 +36,13 @@ export default async function ParentGradesPage() {
                   overallPercent={reportCards[i].overallPercent}
                 />
               ) : (
-                <p className="text-sm text-slate-500">No current term set.</p>
+                <p className="text-sm text-slate-500">No current semester set.</p>
               )}
             </CardBody>
           </Card>
         ))}
         {students.length === 0 ? (
-          <p className="text-sm text-slate-500">No children linked to your account.</p>
+          <p className="text-sm text-slate-500">Your account is not linked to a student record yet. Please contact the college office.</p>
         ) : null}
       </div>
     </div>

@@ -28,7 +28,7 @@ export default async function TeacherAnnouncementsPage() {
 
   return (
     <div>
-      <PageHeader title="Announcements" description="School-wide updates and your class notices." />
+      <PageHeader title="Announcements" description="College-wide updates and your course notices." />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <AnnouncementList
@@ -45,12 +45,12 @@ export default async function TeacherAnnouncementsPage() {
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>New class announcement</CardTitle>
+            <CardTitle>New course announcement</CardTitle>
           </CardHeader>
           <CardBody>
             {myClasses.length === 0 ? (
               <p className="text-sm text-slate-500">
-                You are not a class teacher for any class yet.
+                You are not a course coordinator for any course yet.
               </p>
             ) : (
               <AnnouncementForm classes={myClasses} restrictToClass />

@@ -15,15 +15,15 @@ export function SubjectForm() {
       {state?.error ? <Alert variant="error">{state.error}</Alert> : null}
       {state?.success ? <Alert variant="success">{state.success}</Alert> : null}
       <div>
-        <Label htmlFor="name">Subject name</Label>
-        <Input id="name" name="name" placeholder="e.g. Mathematics" required />
+        <Label htmlFor="name">Unit name</Label>
+        <Input id="name" name="name" placeholder="e.g. Computer Networking" required />
       </div>
       <div>
         <Label htmlFor="code">Code</Label>
-        <Input id="code" name="code" placeholder="e.g. MATH" required />
+        <Input id="code" name="code" placeholder="e.g. ICT201" required />
       </div>
       <Button type="submit" disabled={pending}>
-        {pending ? "Saving..." : "Create subject"}
+        {pending ? "Saving..." : "Create unit"}
       </Button>
     </form>
   );

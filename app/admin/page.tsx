@@ -32,11 +32,11 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <PageHeader title="Dashboard" description="Kiambani School at a glance." />
+      <PageHeader title="Dashboard" description="Masinga Technical Vocational College at a glance." />
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Active students" value={String(studentCount)} />
         <StatCard label="Staff" value={String(staffCount)} />
-        <StatCard label="Classes" value={String(classCount)} />
+        <StatCard label="Courses" value={String(classCount)} />
         <StatCard
           label="Fees outstanding"
           value={(totalBilled - totalPaid).toLocaleString()}

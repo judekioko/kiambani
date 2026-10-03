@@ -32,7 +32,7 @@ export default async function StudentsPage() {
               <Tr>
                 <Th>Admission No.</Th>
                 <Th>Name</Th>
-                <Th>Class</Th>
+                <Th>Course</Th>
                 <Th>Status</Th>
               </Tr>
             </Thead>

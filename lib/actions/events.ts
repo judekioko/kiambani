@@ -24,16 +24,16 @@ export async function createEvent(
 
   if (session.role === "TEACHER") {
     if (parsed.data.audience !== "CLASS" || !parsed.data.classId) {
-      return { error: "Teachers can only add events for their own class" };
+      return { error: "Trainers can only add events for their own course" };
     }
     const cls = await prisma.schoolClass.findUnique({ where: { id: parsed.data.classId } });
     if (!cls || cls.classTeacherId !== session.userId) {
-      return { error: "You are not the class teacher for this class" };
+      return { error: "You are not the coordinator of this course" };
     }
   }
 
   if (parsed.data.audience === "CLASS" && !parsed.data.classId) {
-    return { error: "Select a class for a class-scoped event" };
+    return { error: "Select a course for a course-scoped event" };
   }
 
   await prisma.schoolEvent.create({
@@ -50,6 +50,6 @@ export async function createEvent(
 
   revalidatePath("/admin/events");
   revalidatePath("/teacher/events");
-  revalidatePath("/parent/events");
+  revalidatePath("/student/events");
   return { success: "Event added" };
 }

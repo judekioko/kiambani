@@ -22,8 +22,8 @@ export function ClassForm({
       {state?.error ? <Alert variant="error">{state.error}</Alert> : null}
       {state?.success ? <Alert variant="success">{state.success}</Alert> : null}
       <div>
-        <Label htmlFor="name">Class name</Label>
-        <Input id="name" name="name" placeholder="e.g. Grade 4 Blue" required />
+        <Label htmlFor="name">Course name</Label>
+        <Input id="name" name="name" placeholder="e.g. Diploma in ICT - Year 1" required />
       </div>
       <div>
         <Label htmlFor="academicYearId">Academic year</Label>
@@ -36,7 +36,7 @@ export function ClassForm({
         </Select>
       </div>
       <div>
-        <Label htmlFor="classTeacherId">Class teacher</Label>
+        <Label htmlFor="classTeacherId">Course Coordinator</Label>
         <Select id="classTeacherId" name="classTeacherId" defaultValue="">
           <option value="">Unassigned</option>
           {teachers.map((teacher) => (
@@ -47,7 +47,7 @@ export function ClassForm({
         </Select>
       </div>
       <Button type="submit" disabled={pending}>
-        {pending ? "Saving..." : "Create class"}
+        {pending ? "Saving..." : "Create course"}
       </Button>
     </form>
   );

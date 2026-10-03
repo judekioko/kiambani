@@ -36,7 +36,7 @@ export default async function TeacherDashboardPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Your class(es)</CardTitle>
+            <CardTitle>Your course(s)</CardTitle>
           </CardHeader>
           <CardBody className="space-y-2 text-sm">
             {classes.map((cls) => (
@@ -48,13 +48,13 @@ export default async function TeacherDashboardPage() {
               </div>
             ))}
             {classes.length === 0 ? (
-              <p className="text-slate-400">You are not a class teacher for any class.</p>
+              <p className="text-slate-400">You are not a course coordinator for any course.</p>
             ) : null}
           </CardBody>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Subjects you teach</CardTitle>
+            <CardTitle>Units you teach</CardTitle>
           </CardHeader>
           <CardBody className="space-y-2 text-sm">
             {assignments.map((a) => (
@@ -63,12 +63,12 @@ export default async function TeacherDashboardPage() {
                   {a.subject.name} · {a.class.name} · {a.term.name}
                 </span>
                 <Link href="/teacher/grades" className="text-emerald-700 hover:underline">
-                  Grades
+                  Results
                 </Link>
               </div>
             ))}
             {assignments.length === 0 ? (
-              <p className="text-slate-400">No subject assignments yet.</p>
+              <p className="text-slate-400">No unit assignments yet.</p>
             ) : null}
           </CardBody>
         </Card>

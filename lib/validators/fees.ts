@@ -11,8 +11,8 @@ export const feeItemNames = [
 ] as const;
 
 export const feeStructureSchema = z.object({
-  classId: z.string().min(1, "Class is required"),
-  termId: z.string().min(1, "Term is required"),
+  classId: z.string().min(1, "Course is required"),
+  termId: z.string().min(1, "Semester is required"),
 });
 
 export const generateInvoicesSchema = z.object({

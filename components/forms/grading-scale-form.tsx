@@ -16,7 +16,7 @@ export function GradingScaleForm() {
       {state?.success ? <Alert variant="success">{state.success}</Alert> : null}
       <div>
         <Label htmlFor="name">Scale name</Label>
-        <Input id="name" name="name" placeholder="e.g. Standard KCPE Scale" required />
+        <Input id="name" name="name" placeholder="e.g. Standard TVET Scale" required />
       </div>
       <Button type="submit" disabled={pending}>
         {pending ? "Saving..." : "Create scale"}

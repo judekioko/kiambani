@@ -22,7 +22,7 @@ export function GenerateInvoicesForm({
       {state?.error ? <Alert variant="error">{state.error}</Alert> : null}
       {state?.success ? <Alert variant="success">{state.success}</Alert> : null}
       <div>
-        <Label htmlFor="classId">Class</Label>
+        <Label htmlFor="classId">Course</Label>
         <Select id="classId" name="classId" required>
           {classes.map((cls) => (
             <option key={cls.id} value={cls.id}>
@@ -32,7 +32,7 @@ export function GenerateInvoicesForm({
         </Select>
       </div>
       <div>
-        <Label htmlFor="termId">Term</Label>
+        <Label htmlFor="termId">Semester</Label>
         <Select id="termId" name="termId" required>
           {terms.map((term) => (
             <option key={term.id} value={term.id}>
@@ -46,7 +46,7 @@ export function GenerateInvoicesForm({
         <Input id="dueDate" name="dueDate" type="date" required />
       </div>
       <Button type="submit" disabled={pending}>
-        {pending ? "Generating..." : "Generate invoices for class"}
+        {pending ? "Generating..." : "Generate invoices for course"}
       </Button>
     </form>
   );

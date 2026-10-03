@@ -17,12 +17,12 @@ export async function markAttendance(
     termId: formData.get("termId"),
     date: formData.get("date"),
   });
-  if (!parsed.success) return { error: "Missing class, term, or date" };
+  if (!parsed.success) return { error: "Missing course, semester, or date" };
 
   const cls = await prisma.schoolClass.findUnique({ where: { id: parsed.data.classId } });
-  if (!cls) return { error: "Class not found" };
+  if (!cls) return { error: "Course not found" };
   if (session.role === "TEACHER" && cls.classTeacherId !== session.userId) {
-    return { error: "You are not the class teacher for this class" };
+    return { error: "You are not the coordinator of this course" };
   }
 
   const date = new Date(parsed.data.date);

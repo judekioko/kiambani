@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { getGuardianStudents } from "@/lib/guardian";
+import { getMyStudents } from "@/lib/my-student";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/table";
@@ -13,9 +13,9 @@ const statusTone = {
   EXCUSED: "slate",
 } as const;
 
-export default async function ParentAttendancePage() {
-  const session = await requireRole("PARENT");
-  const students = await getGuardianStudents(session.userId);
+export default async function StudentAttendancePage() {
+  const session = await requireRole("STUDENT");
+  const students = await getMyStudents(session.userId);
 
   const recordsByStudent = await Promise.all(
     students.map((student) =>
@@ -29,7 +29,7 @@ export default async function ParentAttendancePage() {
 
   return (
     <div>
-      <PageHeader title="Attendance" description="Recent attendance for your children." />
+      <PageHeader title="Attendance" description="Your recent attendance." />
       <div className="space-y-6">
         {students.map((student, i) => (
           <Card key={student.id}>
@@ -68,7 +68,7 @@ export default async function ParentAttendancePage() {
           </Card>
         ))}
         {students.length === 0 ? (
-          <p className="text-sm text-slate-500">No children linked to your account.</p>
+          <p className="text-sm text-slate-500">Your account is not linked to a student record yet. Please contact the college office.</p>
         ) : null}
       </div>
     </div>

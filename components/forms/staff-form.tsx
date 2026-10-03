@@ -30,7 +30,7 @@ export function StaffForm() {
       <div>
         <Label htmlFor="role">Role</Label>
         <Select id="role" name="role" required defaultValue="TEACHER">
-          <option value="TEACHER">Teacher</option>
+          <option value="TEACHER">Trainer</option>
           <option value="ACCOUNTANT">Accountant</option>
         </Select>
       </div>
@@ -40,11 +40,11 @@ export function StaffForm() {
       </div>
       <div>
         <Label htmlFor="position">Position</Label>
-        <Input id="position" name="position" placeholder="e.g. Class Teacher" required />
+        <Input id="position" name="position" placeholder="e.g. Head of Department" required />
       </div>
       <div>
         <Label htmlFor="department">Department</Label>
-        <Input id="department" name="department" placeholder="e.g. Sciences" />
+        <Input id="department" name="department" placeholder="e.g. Engineering" />
       </div>
       <div>
         <Label htmlFor="hireDate">Hire date</Label>

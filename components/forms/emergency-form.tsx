@@ -29,7 +29,7 @@ export function EmergencyForm() {
         />
       </div>
       <p className="text-xs text-slate-500">
-        This posts an announcement to everyone and texts every guardian with a phone number on
+        This posts an announcement to everyone and texts every student with a phone number on
         file.
       </p>
       <Button type="submit" variant="danger" disabled={pending}>

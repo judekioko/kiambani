@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { StudentStatusForm } from "@/components/forms/student-status-form";
-import { GuardianContactForm } from "@/components/forms/guardian-contact-form";
+import { StudentContactForm } from "@/components/forms/student-contact-form";
 import { computeReportCard } from "@/lib/report-card";
 import { ReportCardTable } from "@/components/report-card-table";
 
@@ -30,7 +30,7 @@ export default async function StudentDetailPage({
     where: { id },
     include: {
       class: true,
-      guardians: { include: { guardian: true } },
+      user: true,
     },
   });
   if (!student) notFound();
@@ -43,7 +43,7 @@ export default async function StudentDetailPage({
     <div>
       <PageHeader
         title={`${student.firstName} ${student.lastName}`}
-        description={`Admission No. ${student.admissionNo} · ${student.class?.name ?? "Unassigned class"}`}
+        description={`Admission No. ${student.admissionNo} · ${student.class?.name ?? "Unassigned course"}`}
         action={<Badge tone={statusTone[student.status]}>{student.status}</Badge>}
       />
 
@@ -72,29 +72,15 @@ export default async function StudentDetailPage({
 
         <Card>
           <CardHeader>
-            <CardTitle>Guardians</CardTitle>
+            <CardTitle>Login &amp; contact</CardTitle>
           </CardHeader>
-          <CardBody className="space-y-3 text-sm">
-            {student.guardians.map((g) => (
-              <div key={g.id} className="space-y-2 border-b border-slate-100 pb-3 last:border-0 last:pb-0">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-slate-900">{g.guardian.name}</p>
-                    <p className="text-xs text-slate-500">{g.relationship}</p>
-                  </div>
-                  {g.isPrimary ? <Badge tone="emerald">Primary</Badge> : null}
-                </div>
-                <GuardianContactForm
-                  studentId={student.id}
-                  guardianId={g.guardian.id}
-                  initialEmail={g.guardian.email}
-                  initialPhone={g.guardian.phone}
-                />
-              </div>
-            ))}
-            {student.guardians.length === 0 ? (
-              <p className="text-slate-400">No guardians linked</p>
-            ) : null}
+          <CardBody className="text-sm">
+            <StudentContactForm
+              studentId={student.id}
+              hasLogin={Boolean(student.user)}
+              initialEmail={student.user?.email ?? ""}
+              initialPhone={student.user?.phone ?? ""}
+            />
           </CardBody>
         </Card>
       </div>
@@ -102,7 +88,7 @@ export default async function StudentDetailPage({
       <div className="mt-6">
         <Card>
           <CardHeader className="flex items-center justify-between">
-            <CardTitle>Report card</CardTitle>
+            <CardTitle>Results</CardTitle>
             <form className="flex items-center gap-2" method="get">
               <Select name="termId" defaultValue={termId}>
                 {terms.map((term) => (
@@ -120,7 +106,7 @@ export default async function StudentDetailPage({
             {reportCard ? (
               <ReportCardTable rows={reportCard.rows} overallPercent={reportCard.overallPercent} />
             ) : (
-              <p className="text-sm text-slate-500">No terms have been set up yet.</p>
+              <p className="text-sm text-slate-500">No semesters have been set up yet.</p>
             )}
           </CardBody>
         </Card>

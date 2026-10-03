@@ -26,7 +26,7 @@ export const schoolClassSchema = z.object({
 
 export const classSubjectTeacherSchema = z.object({
   classId: z.string().min(1),
-  subjectId: z.string().min(1, "Subject is required"),
-  teacherId: z.string().min(1, "Teacher is required"),
-  termId: z.string().min(1, "Term is required"),
+  subjectId: z.string().min(1, "Unit is required"),
+  teacherId: z.string().min(1, "Trainer is required"),
+  termId: z.string().min(1, "Semester is required"),
 });

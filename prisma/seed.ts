@@ -8,11 +8,11 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   const school = await prisma.school.upsert({
-    where: { id: "kiambani-school" },
+    where: { id: "masinga-tvc" },
     update: {},
     create: {
-      id: "kiambani-school",
-      name: "Kiambani School",
+      id: "masinga-tvc",
+      name: "Masinga Technical Vocational College",
     },
   });
 
@@ -25,7 +25,7 @@ async function main() {
       email: adminEmail,
       passwordHash: adminPasswordHash,
       role: "ADMIN",
-      name: "School Administrator",
+      name: "College Administrator",
     },
   });
 
@@ -41,10 +41,10 @@ async function main() {
   });
 
   await prisma.term.upsert({
-    where: { academicYearId_name: { academicYearId: academicYear.id, name: "Term 1" } },
+    where: { academicYearId_name: { academicYearId: academicYear.id, name: "Semester 1" } },
     update: {},
     create: {
-      name: "Term 1",
+      name: "Semester 1",
       startDate: new Date("2026-01-05"),
       endDate: new Date("2026-04-03"),
       isCurrent: true,
@@ -52,9 +52,9 @@ async function main() {
     },
   });
 
-  console.log("Seeded school:", school.name);
+  console.log("Seeded college:", school.name);
   console.log("Seeded admin login: ", adminEmail, "/ Admin@123");
-  console.log("Seeded academic year:", academicYear.name, "with Term 1");
+  console.log("Seeded academic year:", academicYear.name, "with Semester 1");
   console.log("Admin user id:", admin.id);
 }
 

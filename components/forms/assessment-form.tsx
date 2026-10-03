@@ -26,7 +26,7 @@ export function AssessmentForm({
       {state?.error ? <Alert variant="error">{state.error}</Alert> : null}
       {state?.success ? <Alert variant="success">{state.success}</Alert> : null}
       <div>
-        <Label htmlFor="assignment">Class / Subject / Term</Label>
+        <Label htmlFor="assignment">Course / Unit / Semester</Label>
         <Select
           id="assignment"
           onChange={(e) => {

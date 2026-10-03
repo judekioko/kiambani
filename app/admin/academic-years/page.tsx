@@ -15,8 +15,8 @@ export default async function AcademicYearsPage() {
   return (
     <div>
       <PageHeader
-        title="Academic Years & Terms"
-        description="Manage the school calendar, academic years and terms."
+        title="Academic Years & Semesters"
+        description="Manage the college calendar, academic years and semesters."
       />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
@@ -26,8 +26,8 @@ export default async function AcademicYearsPage() {
                 <Th>Name</Th>
                 <Th>Start</Th>
                 <Th>End</Th>
-                <Th>Terms</Th>
-                <Th>Classes</Th>
+                <Th>Semesters</Th>
+                <Th>Courses</Th>
                 <Th>Status</Th>
               </Tr>
             </Thead>

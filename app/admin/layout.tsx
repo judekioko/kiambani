@@ -3,9 +3,9 @@ import { DashboardShell, type NavItem } from "@/components/dashboard-shell";
 
 const navItems: NavItem[] = [
   { href: "/admin", label: "Dashboard" },
-  { href: "/admin/academic-years", label: "Academic Years & Terms" },
-  { href: "/admin/classes", label: "Classes" },
-  { href: "/admin/subjects", label: "Subjects" },
+  { href: "/admin/academic-years", label: "Academic Years & Semesters" },
+  { href: "/admin/classes", label: "Courses" },
+  { href: "/admin/subjects", label: "Units" },
   { href: "/admin/staff", label: "Staff" },
   { href: "/admin/students", label: "Students" },
   { href: "/admin/attendance", label: "Attendance" },

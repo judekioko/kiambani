@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
-import { getGuardianStudents } from "@/lib/guardian";
+import { getMyStudents } from "@/lib/my-student";
 import { PageHeader } from "@/components/page-header";
 import { AnnouncementList } from "@/components/announcement-list";
 
-export default async function ParentAnnouncementsPage() {
-  const session = await requireRole("PARENT");
-  const students = await getGuardianStudents(session.userId);
+export default async function StudentAnnouncementsPage() {
+  const session = await requireRole("STUDENT");
+  const students = await getMyStudents(session.userId);
   const classIds = students.map((s) => s.classId).filter((id): id is string => Boolean(id));
 
   const announcements = await prisma.announcement.findMany({
@@ -20,7 +20,7 @@ export default async function ParentAnnouncementsPage() {
 
   return (
     <div>
-      <PageHeader title="Announcements" description="Updates from the school and your child's class." />
+      <PageHeader title="Announcements" description="Updates from the college and your course." />
       <AnnouncementList
         items={announcements.map((a) => ({
           id: a.id,

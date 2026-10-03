@@ -16,7 +16,7 @@ export default async function StaffPage() {
 
   return (
     <div>
-      <PageHeader title="Staff" description="Teachers and accountants at the school." />
+      <PageHeader title="Staff" description="Trainers and accountants at the college." />
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <Table>

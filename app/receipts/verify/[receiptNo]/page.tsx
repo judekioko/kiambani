@@ -1,6 +1,7 @@
 import { getPublicReceiptByNo } from "@/lib/receipt";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
+import { COLLEGE_NAME } from "@/lib/brand";
 
 export default async function VerifyReceiptPage({
   params,
@@ -15,7 +16,7 @@ export default async function VerifyReceiptPage({
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Receipt Verification</CardTitle>
-          <p className="mt-1 text-sm text-slate-500">Kiambani School</p>
+          <p className="mt-1 text-sm text-slate-500">{COLLEGE_NAME}</p>
         </CardHeader>
         <CardBody>
           {receipt ? (
@@ -35,7 +36,7 @@ export default async function VerifyReceiptPage({
                   <dd>{receipt.studentName}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-slate-500">Class</dt>
+                  <dt className="text-slate-500">Course</dt>
                   <dd>{receipt.className}</dd>
                 </div>
                 <div className="flex justify-between">

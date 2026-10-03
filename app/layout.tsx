@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { COLLEGE_NAME, PORTAL_NAME } from "@/lib/brand";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kiambani School",
-  description: "Kiambani School Management System",
+  title: PORTAL_NAME,
+  description: `${COLLEGE_NAME} - student portal for results, fees, attendance and notices`,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

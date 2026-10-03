@@ -17,7 +17,7 @@ export function TermForm({ academicYearId }: { academicYearId: string }) {
       {state?.success ? <Alert variant="success">{state.success}</Alert> : null}
       <div>
         <Label htmlFor="name">Name</Label>
-        <Input id="name" name="name" placeholder="e.g. Term 1" required />
+        <Input id="name" name="name" placeholder="e.g. Semester 1" required />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -31,10 +31,10 @@ export function TermForm({ academicYearId }: { academicYearId: string }) {
       </div>
       <label className="flex items-center gap-2 text-sm text-slate-600">
         <input type="checkbox" name="isCurrent" className="rounded border-slate-300" />
-        Set as current term
+        Set as current semester
       </label>
       <Button type="submit" disabled={pending}>
-        {pending ? "Saving..." : "Create term"}
+        {pending ? "Saving..." : "Create semester"}
       </Button>
     </form>
   );

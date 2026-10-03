@@ -30,7 +30,7 @@ export default async function AcademicYearDetailPage({
           <Table>
             <Thead>
               <Tr>
-                <Th>Term</Th>
+                <Th>Semester</Th>
                 <Th>Start</Th>
                 <Th>End</Th>
                 <Th>Status</Th>
@@ -48,7 +48,7 @@ export default async function AcademicYearDetailPage({
               {year.terms.length === 0 ? (
                 <Tr>
                   <Td colSpan={4} className="text-center text-slate-400">
-                    No terms yet
+                    No semesters yet
                   </Td>
                 </Tr>
               ) : null}
@@ -57,7 +57,7 @@ export default async function AcademicYearDetailPage({
         </div>
         <Card>
           <CardHeader>
-            <CardTitle>New term</CardTitle>
+            <CardTitle>New semester</CardTitle>
           </CardHeader>
           <CardBody>
             <TermForm academicYearId={year.id} />
